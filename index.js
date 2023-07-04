@@ -2,6 +2,10 @@ import express from "express"
 import http from "http"
 import cors from "cors"
 import { Server } from "socket.io"
+import dotenv from "dotenv"
+
+dotenv.config()
+const port=process.env.PORT || 6001
 
 const app=express();
 app.use(cors())
@@ -13,14 +17,16 @@ const io= new Server(server, {
     }
 })
 
-const users=new Map()
+const users=[]
 
 io.on("connection", (socket)=>{
-    socket.emit("me", socket.id)
-    users.set(socket, socket.id)
+    socket.emit("myid", socket.id)
+    users.push(socket.id)
+	console.log("Connected socket")
 
 	socket.on("disconnect", () => {
 		socket.broadcast.emit("callEnded")
+		users.pop(socket.id)
 	})
 
 	socket.on("callUser", (data) => {
@@ -32,8 +38,8 @@ io.on("connection", (socket)=>{
 	})
 })
 
-app.listen(3001,()=>{
-    console.log("Server running on port 3001")
+server.listen(port,()=>{
+    console.log(`Server running on port ${port}`)
 })
 app.get("/",(req,res)=>{
     res.send({users})

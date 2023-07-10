@@ -30,11 +30,20 @@ io.on("connection", (socket)=>{
 	})
 
 	socket.on("callUser", (data) => {
-		io.to(data.userToCall).emit("callUser", { signal: data.signalData, from: data.from, name: data.name })
+		io.to(data.userToCall).emit("receivingCall", { signal: data.signalData, from: data.from, name: data.name })
 	})
 
-	socket.on("answerCall", (data) => {
+	socket.on("answeredCall", (data) => {
 		io.to(data.to).emit("callAccepted", data.signal)
+	})
+	socket.on("messagesent", (data) => {
+		io.to(data.to).emit("messagereceived", data.message)
+	})
+	socket.on("videoOff", (data) => {
+		io.to(data.to).emit("userVideoOff", data.video)
+	})
+	socket.on("mute", (data) => {
+		io.to(data.to).emit("userMute", data.audio)
 	})
 })
 

@@ -17,16 +17,14 @@ const io= new Server(server, {
     }
 })
 
-const users=[]
 
 io.on("connection", (socket)=>{
     socket.emit("myid", socket.id)
-    users.push(socket.id)
 	console.log("Connected socket")
 
 	socket.on("disconnect", () => {
 		socket.broadcast.emit("callEnded")
-		users.pop(socket.id)
+		// users.pop(socket.id)
 	})
 
 	socket.on("callUser", (data) => {
@@ -34,7 +32,7 @@ io.on("connection", (socket)=>{
 	})
 
 	socket.on("answeredCall", (data) => {
-		io.to(data.to).emit("callAccepted", data.signal)
+		io.to(data.to).emit("callAccepted", data)
 	})
 	socket.on("messagesent", (data) => {
 		io.to(data.to).emit("messagereceived", data.message)

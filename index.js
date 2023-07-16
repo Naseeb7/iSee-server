@@ -24,7 +24,6 @@ io.on("connection", (socket)=>{
 
 	socket.on("disconnect", () => {
 		socket.broadcast.emit("callEnded")
-		// users.pop(socket.id)
 	})
 
 	socket.on("callUser", (data) => {
@@ -34,8 +33,11 @@ io.on("connection", (socket)=>{
 	socket.on("answeredCall", (data) => {
 		io.to(data.to).emit("callAccepted", data)
 	})
+	socket.on("sendImage", (data) => {
+		io.to(data.to).emit("receiveImage", data)
+	})
 	socket.on("messagesent", (data) => {
-		io.to(data.to).emit("messagereceived", data.message)
+		io.to(data.to).emit("messagereceived", data)
 	})
 	socket.on("videoOff", (data) => {
 		io.to(data.to).emit("userVideoOff", data.video)

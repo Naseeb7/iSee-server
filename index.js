@@ -23,7 +23,8 @@ io.on("connection", (socket)=>{
 	console.log("Connected socket")
 
 	socket.on("disconnect", () => {
-		socket.broadcast.emit("callEnded")
+			socket.broadcast.emit("userDisconnected", socket.id)
+			console.log("Disconnected")
 	})
 
 	socket.on("callUser", (data) => {
@@ -44,6 +45,10 @@ io.on("connection", (socket)=>{
 	})
 	socket.on("mute", (data) => {
 		io.to(data.to).emit("userMute", data.audio)
+	})
+	socket.on("socketDisconnected", (data) => {
+		io.to(data.to).emit("callEnded", data)
+		console.log("Disconnected")
 	})
 })
 

@@ -6,12 +6,17 @@ import dotenv from "dotenv"
 
 dotenv.config()
 const port=process.env.PORT || 6001
+const URL=process.env.REACT_APP_URL
 
 const app=express();
 app.use(cors())
 
 const server= http.createServer(app);
-const io= new Server(server)
+const io= new Server(server, {
+    cors: {
+        origin: URL,
+    }
+})
 
 
 io.on("connection", (socket)=>{

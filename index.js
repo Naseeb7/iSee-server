@@ -46,6 +46,9 @@ io.on("connection", (socket)=>{
 	socket.on("mute", (data) => {
 		io.to(data.to).emit("userMute", data.audio)
 	})
+	socket.on("typing", (data) => {
+		io.to(data.to).emit("userTyping", data.typing)
+	})
 	socket.on("socketDisconnected", (data) => {
 		io.to(data.to).emit("callEnded", data)
 		console.log("Disconnected")

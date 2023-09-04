@@ -29,10 +29,12 @@ io.on("connection", (socket)=>{
 	})
 
 	socket.on("callUser", (data) => {
+		console.log("callingUser")
 		io.to(data.userToCall).emit("receivingCall", { signal: data.signalData, from: data.from, name: data.name })
 	})
 
 	socket.on("answeredCall", (data) => {
+		console.log("answeredCall")
 		io.to(data.to).emit("callAccepted", data)
 	})
 	socket.on("sendImage", (data) => {
